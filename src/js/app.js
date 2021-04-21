@@ -21,7 +21,7 @@ function timeFunc(t) {
   return new Date(t);
 }
 
-async function showData(x) {
+async function displayTrip(x) {
   if (x != null) {
     tripSec.innerHTML = `<li><span class="material-icons">exit_to_app</span> Depart at ${timeFunc(x.times.start)}</li>`;
 
@@ -59,5 +59,33 @@ async function getStreets(a) {
   let info = await fetch(`${mapURL}${a}.json?${mapKey}&bbox=-97.325875,49.766204,-96.953987,49.99275&limit=10`)
   info = await info.json();
   return info;
+}
+
+async function findRoute(longA, longB, latA, latB) {
+  let info = await fetch(`${busURL + transitKey}origin=geo/${latA},${longA}&destination=geo/${latB},${longB}`);
+  info = await info.json();
+  let list = info.plans.sort((x, y) => {
+    x = timeFunc(x.times.end);
+    y = timeFunc(y.times.end);
+    return x.getTime() < y.getTime()
+  })
+  showData(info.plans[0]);
+}
+
+function submitFunc() {
+desForm.onsubmit = async (e) => {
+  e.preventDefault();
+  if (desInp.value.length > 0) {
+    desDiv.innerHTML = "";
+    let info = await getStreets(desInp.value);
+    info.features.forEach((item) => {
+      item.place_name = item.place_name.split(",");
+      desDiv.insertAdjacentHTML(`afterbegin`,`<li data-long="${item.center[0]}" data-lat="${item.center[1]}">
+          <div class= "name" > ${item.place_name[0]}</div>
+          <div>${item.place_name[1]}</div>
+        </li >`);
+    })
+    desInp.value = "";
+  }
 }
 
