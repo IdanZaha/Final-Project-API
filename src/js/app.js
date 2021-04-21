@@ -69,7 +69,7 @@ async function findRoute(longA, longB, latA, latB) {
     y = timeFunc(y.times.end);
     return x.getTime() < y.getTime()
   })
-  showData(info.plans[0]);
+  displayTrip(info.plans[0]);
 }
 
 function submitFunc() {
@@ -107,7 +107,19 @@ orgForm.onsubmit = async (e) => {
 }
 
 function clickFunc() {
+desDiv.onclick = (e) => {
+  let x = e.target.closest("li");
+  if (x) {
+    x.classList.add("selected");
+  }
+}
 
+orgDiv.onclick = (e) => {
+  let x = e.target.closest("li");
+  if (x) {
+    x.classList.add("selected");
+  }
+ }
 }
 
 
