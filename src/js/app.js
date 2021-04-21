@@ -120,6 +120,10 @@ orgDiv.onclick = (e) => {
     x.classList.add("selected");
   }
  }
+
+ butt.onclick = () => {
+  findRoute(selDiv[0].dataset.long, selDiv[1].dataset.long, selDiv[0].dataset.lat, selDiv[1].dataset.lat);
+  }
 }
 
 
