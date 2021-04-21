@@ -16,3 +16,42 @@ const selDiv = document.getElementsByClassName("selected");
 
 
 
+function timeFunc(t) {
+  t = t.split("T").join(" ");
+  return new Date(t);
+}
+
+async function showData(x) {
+  if (x != null) {
+    tripSec.innerHTML = `<li><span class="material-icons">exit_to_app</span> Depart at ${timeFunc(x.times.start)}</li>`;
+
+    x.segments.forEach(function (y) {
+      let icon = y.type;
+      let text;
+
+      let start = timeFunc(y.times.start);
+      let end = timeFunc(y.times.end);
+      let diff = Math.abs(end.getMinutes() - start.getMinutes());
+
+      if (y.type === "ride") {
+        icon = "directions_bus";
+        text = `Ride the ${y.route.key} for ${diff} minutes `
+      }
+      if (y.type === "walk") {
+        icon = "directions_walk";
+        if ("stop" in y.to) {
+          text = `Walk for ${diff} minutes to stop #${y.to.stop.key} - ${y.to.stop.name}`
+        } else {
+          text = `Walk for ${diff} minutes to your destination, arriving at ${end}`;
+        }
+      }
+      if (y.type === "transfer") {
+        icon = "transfer_within_a_station";
+        text = `Transfer from stop #${y.from.stop.key} - ${y.from.stop.name} to stop #${y.to.stop.key} - ${y.to.stop.name}`
+      }
+
+      tripSec.insertAdjacentHTML("beforeend", `<li><span class="material-icons">${icon}</span> ${text}</li>`);
+    });
+  }
+}
+
