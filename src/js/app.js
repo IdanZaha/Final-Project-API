@@ -89,3 +89,28 @@ desForm.onsubmit = async (e) => {
   }
 }
 
+orgForm.onsubmit = async (e) => {
+  e.preventDefault();
+  if (orgInp.value.length > 0) {
+    orgDiv.innerHTML = "";
+    let info = await getStreets(orgInp.value);
+    info.features.forEach((item) => {
+      item.place_name = item.place_name.split(",");
+      orgDiv.insertAdjacentHTML(`afterbegin`,`<li data-long="${item.center[0]}" data-lat="${item.center[1]}">
+          <div class="name"> ${item.place_name[0]}</div>
+          <div>${item.place_name[1]}</div>
+        </li >`);
+    })
+    orgInp.value = "";
+    }
+  }
+}
+
+function clickFunc() {
+
+}
+
+
+
+submitFunc();
+clickFunc();
