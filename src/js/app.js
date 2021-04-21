@@ -26,12 +26,12 @@ async function showData(x) {
     tripSec.innerHTML = `<li><span class="material-icons">exit_to_app</span> Depart at ${timeFunc(x.times.start)}</li>`;
 
     x.segments.forEach(function (y) {
-      let icon = y.type;
-      let text;
-
       let start = timeFunc(y.times.start);
       let end = timeFunc(y.times.end);
       let diff = Math.abs(end.getMinutes() - start.getMinutes());
+      
+      let icon = y.type;
+      let text;
 
       if (y.type === "ride") {
         icon = "directions_bus";
@@ -53,5 +53,11 @@ async function showData(x) {
       tripSec.insertAdjacentHTML("beforeend", `<li><span class="material-icons">${icon}</span> ${text}</li>`);
     });
   }
+}
+
+async function getStreets(a) {
+  let info = await fetch(`${mapURL}${a}.json?${mapKey}&bbox=-97.325875,49.766204,-96.953987,49.99275&limit=10`)
+  info = await info.json();
+  return info;
 }
 
